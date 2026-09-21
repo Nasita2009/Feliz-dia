@@ -1,0 +1,186 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: white;
+
+    font-family: Arial, sans-serif;
+
+    padding: 20px;
+}
+
+
+/* CAJA PRINCIPAL */
+
+.contenedor {
+
+    width: 100%;
+    max-width: 430px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    /* Borde rosa */
+    border: 3px solid #ff69a8;
+
+    /* Relleno rosa */
+    background: #ffd6e7;
+
+    border-radius: 25px;
+
+    padding: 30px 20px;
+}
+
+
+/* PREGUNTA */
+
+h1 {
+
+    font-size: 28px;
+
+    line-height: 1.3;
+
+    color: #333;
+
+    margin-bottom: 25px;
+}
+
+
+/* IMAGEN */
+
+.marco-imagen {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+
+.marco-imagen img {
+
+    max-width: 100%;
+
+    width: auto;
+
+    max-height: 280px;
+
+    object-fit: contain;
+
+    border-radius: 15px;
+}
+
+
+/* BOTONES */
+
+.botones {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 20px;
+
+    width: 100%;
+}
+
+
+button {
+
+    min-width: 110px;
+
+    padding: 13px 25px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    background: white;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease;
+}
+
+
+button:active {
+
+    transform: scale(0.95);
+}
+
+
+/* BOTÓN SÍ */
+
+.boton-si {
+
+    color: #218838;
+
+    border: 3px solid #28a745;
+}
+
+
+/* BOTÓN NO */
+
+.boton-no {
+
+    color: #dc3545;
+
+    border: 3px solid #dc3545;
+}
+
+
+/* BOTÓN SIGUIENTE */
+
+.boton-siguiente {
+
+    color: #d63384;
+
+    border: 3px solid #d63384;
+}
+
+
+/* TELÉFONOS PEQUEÑOS */
+
+@media (max-width: 400px) {
+
+    .contenedor {
+
+        padding: 25px 15px;
+    }
+
+
+    h1 {
+
+        font-size: 24px;
+    }
+
+
+    button {
+
+        min-width: 100px;
+
+        padding: 12px 20px;
+    }
+}
