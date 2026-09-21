@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>¡Feliz día! 💞</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: white;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .tarjeta {
+            width: 100%;
+            background: #ffd6e7;
+            border: 3px solid #ff69a8;
+            border-radius: 30px;
+            padding: 30px 22px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(255, 105, 168, 0.18);
+            animation: aparecer 0.4s ease;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #222;
+        }
+
+        h2 {
+            font-size: 25px;
+            color: #222;
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        p {
+            color: #333;
+            font-size: 17px;
+            line-height: 1.65;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .centrado {
+            text-align: center;
+        }
+
+        .imagen {
+            width: 75%;
+            max-width: 260px;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+            margin: 10px auto 22px;
+            border-radius: 18px;
+        }
+
+        .botones {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 13px 30px;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: 0.2s;
+            min-width: 115px;
+        }
+
+        button:hover {
+            transform: scale(1.04);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .btn-si {
+            border: 3px solid #18a558;
+            color: #138a48;
+        }
+
+        .btn-no {
+            border: 3px solid #e63946;
+            color: #d62839;
+        }
+
+        .btn-siguiente {
+            border: 3px solid #e83e8c;
+            color: #e83e8c;
+        }
+
+        .frase {
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 20px;
+            padding: 22px 18px;
+            margin: 15px 0;
+        }
+
+        .frase p {
+            font-style: italic;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .autor {
+            text-align: center;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 0;
+        }
+
+        .pregunta-final {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .corazon {
+            font-size: 25px;
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 12px;
+                align-items: center;
+            }
+
+            .tarjeta {
+                padding: 25px 17px;
+                border-radius: 25px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+            .imagen {
+                width: 80%;
+                max-height: 240px;
+            }
+
+            button {
+                font-size: 17px;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="tarjeta" id="tarjeta">
+
+        <h1>¡Feliz día! 💞</h1>
+
+        <h2 id="titulo">
+            Antes de comenzar... ¿tú me amas?
+        </h2>
+
+        <img
+            id="imagen"
+            class="imagen"
+            src="{{ url_for('static', filename='images/pocoyo.png') }}"
+            alt="Pocoyo">
+
+        <div class="botones" id="botones">
+            <button class="btn-si" onclick="responderSi()">
+                Sí
+            </button>
+
+            <button class="btn-no" onclick="responderNo()">
+                No
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+    ============================================================
+    CONFIGURACIÓN
+    ============================================================
+    */
+
+    const pocoyo = "{{ url_for('static', filename='images/pocoyo.png') }}";
+    const pocoyoTriste = "{{ url_for('static', filename='images/imagen2.png') }}";
+
+
+    /*
+    ============================================================
+    FUNCIÓN PARA CAMBIAR TODA LA TARJETA
+    ============================================================
+    */
+
+    function cambiarPantalla(titulo, contenido, imagen, botonTexto = "Siguiente") {
+
+        const tarjeta = document.getElementById("tarjeta");
+
+        tarjeta.innerHTML = `
+            <h1>¡Feliz día! 💞</h1>
+
+            <h2>${titulo}</h2>
+
+            ${imagen ? `
+                <img
+                    class="imagen"
+                    src="${imagen}"
+                    alt="Imagen"
+                >
+            ` : ""}
+
+            <div class="contenido">
+                ${contenido}
+            </div>
+
+            <div class="botones">
+                <button
+                    class="btn-siguiente"
+                    onclick="siguiente()">
+                    ${botonTexto}
+                </button>
+            </div>
+        `;
+    }
+
+
+    /*
+    ============================================================
+    CONTROL DE PANTALLAS
+    ============================================================
+    */
+
+    let pantalla = 0;
+
+
+    /*
+    ============================================================
+    CUANDO DICE NO
+    ============================================================
+    */
+
+    function responderNo() {
+
+        if (pantalla === 0) {
+
+            pantalla = -1;
+
+            cambiarPantalla(
+                "¿En verdad no me amas? 😞",
+
+                `
+                <p class="centrado">
+                    Bueno... eso sí me puso un poquito triste.
+                    Pero todavía tengo algunas cosas que quiero
+                    decirte. 💞
+                </p>
+                `,
+
+                pocoyoTriste
+            );
+
+            return;
+        }
+
+
+        if (pantalla === -1) {
+
+            pantalla = -2;
+
+            cambiarPantalla(
+                "Vamos, di que sí ",
+
+                `
+                <p class="centrado">
+                    Piénsalo otra vez...
+                    todavía no quiero rendirme tan rápido. 🥺
+                </p>
+                `,
+
+                pocoyoTriste
+            );
+
+            return;
+        }
+
+
+        if (pantalla === -2) {
+
+            pantalla = -3;
+
+            cambiarPantalla(
+                `
+                <p class="centrado">
+                    Ya no te molestaré más, pero por última vez...
+                </p>
+
+                <p class="pregunta-final">
+                    ¿Me amas?
+                </p>
+                `,
+
+                pocoyoTriste
+            );
+
+            return;
+        }
+
+
+        if (pantalla === -3) {
+
+            pantalla = 1;
+
+            cambiarPantalla(
+                `
+                <p class="centrado">
+                    Está bien... respeto lo que sientes.
+                    Gracias por llegar hasta aquí y leer todo esto.
+                </p>
+                `,
+
+                pocoyoTriste
+            );
+
+            return;
+        }
+
+
+        // Si llega al final y dice que no
+        cambiarPantalla(
+            "Está bien... ",
+
+            `
+            <p class="centrado">
+                Gracias por haber leído todo esto.
+                Lo importante es que siempre seas sincera
+                con lo que sientes. 
+            </p>
+            `,
+
+            pocoyoTriste
+        );
+    }
+
+
+    /*
+    ============================================================
+    CUANDO DICE SÍ
+    ============================================================
+    */
+
+    function responderSi() {
+
+        pantalla = 1;
+
+        cambiarPantalla(
+            "Sabía que dirías que sí 💞",
+
+            `
+            `,
+
+            pocoyo
+        );
+    }
+
+
+    /*
+    ============================================================
+    BOTÓN SIGUIENTE
+    ============================================================
+    */
+
+    function siguiente() {
+
+        pantalla++;
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 2
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 2) {
+
+            cambiarPantalla(
+                "Hoy es un día especial... 💞",
+
+                `
+                <p>
+                    Hoy es un día especial... aparte de que se
+                    celebra el día de dar flores amarillas,
+                    hoy se cumple un mes y cinco días de habernos
+                    conocido.
+                </p>
+
+                <p>
+                    En este tiempo hemos pasado mucho tiempo
+                    juntos, hemos tenido momentos lindos,
+                    risas, conversaciones, peleas y también
+                    momentos en los que simplemente hemos
+                    disfrutado de estar juntos.
+                </p>
+
+                <p>
+                    Y aunque un mes y cinco días pueda parecer
+                    poco para algunas personas, para mí significa
+                    muchísimo por todo lo que hemos vivido
+                    durante este tiempo.
+                </p>
+
+                <p>
+                    Me gusta pensar en todas esas pequeñas cosas
+                    que fueron haciendo que te convirtieras en
+                    alguien tan especial para mí.
+                </p>
+
+                <p>
+                    Cada conversación, cada risa, cada mensaje,
+                    cada momento bonito y hasta cada discusión
+                    forma parte de nuestra historia.
+                </p>
+
+                <p>
+                    No todo ha sido perfecto, pero justamente eso
+                    hace que todo se sienta más real y especial.
+                    Hemos aprendido cosas el uno del otro y
+                    seguimos conociéndonos poquito a poquito.
+                </p>
+
+                <p>
+                    Por eso quería hacer algo diferente para
+                    recordarte este día y demostrarte que valoro
+                    muchísimo todo el tiempo que hemos compartido.
+                </p>
+
+                <p class="centrado">
+                    Gracias por formar parte de estos momentos. 💞
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 3
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 3) {
+
+            cambiarPantalla(
+                "Tal vez esto no sean flores amarillas... ",
+
+                `
+                <p>
+                    Tal vez esto no sean flores amarillas, pero
+                    es algo que quiero que quede para siempre.
+                </p>
+
+                <p>
+                    Es algo que hice con mucho amor, con tiempo,
+                    dedicación y pensando en ti mientras iba
+                    preparando cada parte.
+                </p>
+
+                <p>
+                    Quizá no sea el regalo más grande del mundo,
+                    ni sea algo perfecto, pero cada palabra que
+                    encuentres aquí está puesta porque quería
+                    compartir contigo algo que salió de mí.
+                </p>
+
+                <p>
+                    Quería hacer algo que no solamente pudieras
+                    recibir y guardar, sino algo que pudieras
+                    volver a mirar algún día y recordar este
+                    momento.
+                </p>
+
+                <p>
+                    Porque los regalos pueden desaparecer,
+                    las flores algún día se marchitan y muchas
+                    cosas cambian con el tiempo...
+                </p>
+
+                <p>
+                    Pero un recuerdo bonito puede quedarse con
+                    nosotros durante muchísimo tiempo.
+                </p>
+
+                <p>
+                    Por eso hice esto para ti.
+                    Espero de corazón que te guste y que puedas
+                    sentir todo el cariño que puse en cada parte.
+                </p>
+
+                <p class="centrado">
+                    Esto lo hice especialmente para ti. 💞
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 4 - LIBRO
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 4) {
+
+            cambiarPantalla(
+                "Ya sé que no son flores amarillas... ",
+
+                `
+                <p class="centrado">
+                    Pero me compré un libro justo para decirte
+                    cosas bonitas.
+                </p>
+
+                <p class="centrado">
+                    Y encontré algunas frases que me hicieron
+                    pensar en ti.
+                </p>
+
+                <div class="frase">
+
+                    <p>
+                        “Cuando el cielo quiere salvar a un hombre,
+                        le envía el amor.”
+                    </p>
+
+                    <p class="autor">
+                        — Lao Tse
+                    </p>
+
+                </div>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 5
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 5) {
+
+            cambiarPantalla(
+                "Una frase para ti ",
+
+                `
+                <div class="frase">
+
+                    <p>
+                        “Amo como ama el amor. No conozco otra
+                        razón para amar que amarte.”
+                    </p>
+
+                    <p class="autor">
+                        — Fernando Pessoa
+                    </p>
+
+                </div>
+
+                <p class="centrado">
+                    Y creo que a veces las palabras más sencillas
+                    pueden decir muchísimo.
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 6
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 6) {
+
+            cambiarPantalla(
+                "Otra frase que encontré ",
+
+                `
+                <div class="frase">
+
+                    <p>
+                        “¡Cuán hermosos son tus amores!
+                        ¡Cuánto mejores que el vino tus amores,
+                        y el olor de tus ungüentos que todas
+                        las especias aromáticas!”
+                    </p>
+
+                    <p class="autor">
+                        — El Cantar de los Cantares
+                    </p>
+
+                </div>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 7
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 7) {
+
+            cambiarPantalla(
+                "Y esta me gustó muchísimo ",
+
+                `
+                <div class="frase">
+
+                    <p>
+                        “Dame mil besos, luego cien, luego otros
+                        mil, luego cien, y finalmente, cuando
+                        lleguemos a muchos miles, perderemos la
+                        cuenta para no saberla y para que ningún
+                        malvado pueda interrogarnos al saber
+                        cuántos besos han sido los besos.”
+                    </p>
+
+                    <p class="autor">
+                        — Catulo
+                    </p>
+
+                </div>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 8
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 8) {
+
+            cambiarPantalla(
+                "Una última frase del libro ",
+
+                `
+                <div class="frase">
+
+                    <p>
+                        “Yo quiero amarte mucho, con un amor sin
+                        pausa, con un amor sin término, como los
+                        dioses aman, como los astros, como las
+                        bestias y las plantas.”
+                    </p>
+
+                    <p class="autor">
+                        — Susana March
+                    </p>
+
+                </div>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 9 - CARTA PARTE 1
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 9) {
+
+            cambiarPantalla(
+                "Oye, he estado pensando en esto por mucho tiempo...",
+
+                `
+                <p>
+                    Y tú ya sabes que me gustas.
+                    Sin decirte mentiras, sí siento algo muy
+                    fuerte por ti, pero no es por lujuria ni
+                    porque sí.
+                </p>
+
+                <p>
+                    Siento esto por ti porque me has hecho ver
+                    cosas que con nadie más había visto, porque
+                    llegaste a mi vida y cambiaste muchas cosas
+                    que yo creía saber sobre el amor.
+                </p>
+
+                <p>
+                    Eres una chica superlinda, bonita, bella,
+                    hermosa, preciosa, interesante, maravillosa,
+                    única, especial y asombrosa.
+                </p>
+
+                <p>
+                    Hay muchísimas cosas de ti que me encantan y
+                    que me parecen demasiado hermosas.
+                </p>
+
+                <p>
+                    Y la verdad es que podría decirte cien razones
+                    por las que te quiero, pero creo que detrás de
+                    todas ellas hay algo que me cuesta mucho
+                    decirte:
+                </p>
+
+                <p class="pregunta-final">
+                    “Te amo.” 💞
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 10 - CARTA PARTE 2
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 10) {
+
+            cambiarPantalla(
+                "Porque apareciste en mi vida... ",
+
+                `
+                <p>
+                    Te amo porque apareciste en mi vida y, aunque
+                    estemos lejos, lograste sentirte más cerca
+                    que muchas personas que tengo al lado.
+                </p>
+
+                <p>
+                    Te amo por tus mensajes que pueden cambiarme
+                    el día, por tu forma de hablarme y por las
+                    veces que nos quedamos hablando hasta tener
+                    sueño o bueno, yo JAJAJAJAJA.
+                </p>
+
+                <p>
+                    Te amo por esos momentos en los que
+                    simplemente estamos ahí, juntos de alguna
+                    forma.
+                </p>
+
+                <p>
+                    Porque me escuchas, porque recuerdas las cosas
+                    que te cuento, porque me haces reír y porque
+                    me apoyas cuando estoy mal.
+                </p>
+
+                <p>
+                    También porque celebras conmigo cuando algo
+                    me sale bien.
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 11 - CARTA PARTE 3
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 11) {
+
+            cambiarPantalla(
+                "Me gusta conocerte cada día más...",
+
+                `
+                <p>
+                    Me haces sentir escuchado, querido, importante
+                    y valorado.
+                </p>
+
+                <p>
+                    Te amo por tu forma de ser, por tu risa, por
+                    cómo hablas y por esas pequeñas cosas que
+                    quizá para ti no significan mucho, pero que
+                    para mí significan muchísimo.
+                </p>
+
+                <p>
+                    Me gusta conocerte cada día un poquito más,
+                    saber de tus gustos, tus sueños, tus miedos,
+                    tus historias y todo eso que te hace ser tú.
+                </p>
+
+                <p>
+                    Te amo porque contigo puedo ser yo mismo.
+                    Porque siento que puedo contarte lo bueno,
+                    lo malo, mis preocupaciones, mis tonterías
+                    y hasta mis días difíciles sin sentir que
+                    tengo que fingir ser alguien más.
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 12 - CARTA PARTE 4
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 12) {
+
+            cambiarPantalla(
+                "Me haces querer ser mejor... ",
+
+                `
+                <p>
+                    Te amo porque me haces querer ser mejor
+                    persona y porque desde que llegaste siento
+                    que mi vida tiene momentos mucho más bonitos.
+                </p>
+
+                <p>
+                    Pero hay algo que también quiero decirte y
+                    que me da mucho miedo admitir...
+                </p>
+
+                <p>
+                    Tengo miedo de estar sintiendo algo mucho
+                    más grande de lo que tú sientes por mí.
+                </p>
+
+                <p>
+                    Tengo miedo de estar construyendo en mi cabeza
+                    algo que quizá para ti no significa lo mismo.
+                </p>
+
+                <p>
+                    Y no te lo digo para hacerte sentir culpable
+                    ni para que me respondas algo que no sientes.
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 13 - CARTA PARTE 5
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 13) {
+
+            cambiarPantalla(
+                "Solo quiero que seas sincera...",
+
+                `
+                <p>
+                    No quiero que me digas “te amo” solo porque
+                    yo te lo dije.
+                </p>
+
+                <p>
+                    Prefiero mil veces que seas sincera conmigo,
+                    aunque la respuesta pueda doler.
+                </p>
+
+                <p>
+                    Porque para mí esto es real.
+                    Lo que siento por ti es real.
+                </p>
+
+                <p>
+                    Y justamente porque te quiero tanto, quiero
+                    que puedas decirme lo que de verdad sientes,
+                    sin miedo a lastimarme ni a decepcionarme.
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 14 - CARTA PARTE 6
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 14) {
+
+            cambiarPantalla(
+                "No sé qué pasará mañana... ",
+
+                `
+                <p>
+                    Yo no sé exactamente qué va a pasar con
+                    nosotros, ni cuánto tiempo tendremos que
+                    esperar, ni qué obstáculos puedan aparecer.
+                </p>
+
+                <p>
+                    Pero sí sé que cada momento contigo, cada
+                    mensaje, cada risa y cada conversación se ha
+                    quedado conmigo de una forma que no esperaba.
+                </p>
+
+                <p>
+                    Me haces sentir que puedo querer a alguien
+                    de una manera que antes no creía posible.
+                </p>
+
+                <p>
+                    Y por eso no quiero esconderlo más.
+                </p>
+
+                <p>
+                    Te quiero por todo lo que eres, por todo lo
+                    que me haces sentir y por todo lo que hemos
+                    vivido hasta ahora.
+                </p>
+
+                <p>
+                    Y si algún día me preguntas por qué,
+                    probablemente podría darte otras cien razones,
+                    pero todas terminarían diciendo lo mismo:
+                </p>
+
+                <p class="pregunta-final">
+                    “Porque eres tú.” 💞
+                </p>
+                `,
+
+                null
+            );
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------------
+        PANTALLA 15 - PREGUNTA
+        --------------------------------------------------------
+        */
+
+        if (pantalla === 15) {
+
+            const tarjeta = document.getElementById("tarjeta");
+
+            tarjeta.innerHTML = `
+
+                <h1>¡Feliz día! 💞</h1>
+
+                <h2>
+                    Hay algo que quiero preguntarte...
+                </h2>
+
+                <p class="pregunta-final">
+                    ¿Te gustaría ser mi novia? 
+                </p>
+
+                <div class="botones">
+
+                    <button
+                        class="btn-si"
+                        onclick="aceptarNoviazgo()">
+                        Sí
+                    </button>
+
+                    <button
+                        class="btn-no"
+                        onclick="rechazarNoviazgo()">
+                        No
+                    </button>
+
+                </div>
+            `;
+
+            return;
+        }
+
+    }
+
+
+    /*
+    ============================================================
+    SI ACEPTA SER NOVIA
+    ============================================================
+    */
+
+    function aceptarNoviazgo() {
+
+        const tarjeta = document.getElementById("tarjeta");
+
+        tarjeta.innerHTML = `
+
+            <h1>¡Feliz día! 💞</h1>
+
+            <h2>
+                Entonces tengo una última cosa que decirte...
+            </h2>
+
+            <p class="centrado">
+                Quiero prometerte que voy a valorar cada momento
+                que podamos compartir.
+            </p>
+
+            <p class="centrado">
+                Quiero seguir conociéndote, escucharte, hacerte
+                reír y construir recuerdos bonitos contigo.
+            </p>
+
+            <div class="frase">
+
+                <p>
+                    “Ser esclavo de quien se ama es tener por
+                    prisión el paraíso.”
+                </p>
+
+            </div>
+
+            <p class="centrado">
+                Gracias por ser parte de mi vida. 💞
+            </p>
+
+            <div class="botones">
+
+                <button
+                    class="btn-siguiente"
+                    onclick="finalizar()">
+                    Siguiente
+                </button>
+
+            </div>
+        `;
+    }
+
+
+    /*
+    ============================================================
+    SI DICE NO A SER NOVIA
+    ============================================================
+    */
+
+    function rechazarNoviazgo() {
+
+        const tarjeta = document.getElementById("tarjeta");
+
+        tarjeta.innerHTML = `
+
+            <h1>¡Feliz día! 💞</h1>
+
+            <h2>
+                Está bien 
+            </h2>
+
+            <p class="centrado">
+                Gracias por ser sincera conmigo.
+            </p>
+
+            <p class="centrado">
+                Todo lo que te escribí fue porque quería que
+                supieras lo especial que eres para mí.
+            </p>
+
+            <p class="centrado">
+                No tienes que decir algo que no sientes.
+                Lo importante es que puedas ser tú misma.
+            </p>
+
+        `;
+    }
+
+
+    /*
+    ============================================================
+    FINAL
+    ============================================================
+    */
+
+    function finalizar() {
+
+        const tarjeta = document.getElementById("tarjeta");
+
+        tarjeta.innerHTML = `
+
+            <h1>¡Feliz día! 💞</h1>
+
+            <h2>
+                Gracias por llegar hasta aquí 
+            </h2>
+
+            <p class="centrado">
+                Espero que cuando vuelvas a mirar esta página
+                recuerdes todo el tiempo, cariño y dedicación
+                que puse en hacerla.
+            </p>
+
+            <p class="pregunta-final">
+                💞
+            </p>
+
+        `;
+    }
+
+</script>
+
+</body>
+</html>
